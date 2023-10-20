@@ -28,4 +28,23 @@ public class Attacker extends PlayerStats{
     private Double xAper90;
     @JsonProperty("expected_goal_involvements_per_90")
     private Double xGIPer90;
+
+    public Attacker addStats(Attacker player){
+        addData(this,player);
+
+        this.setGoals(this.getGoals()+player.getGoals());
+        this.setAssists(this.getAssists()+ player.getAssists());
+        this.setXG(this.getXG()+ player.getXG());
+        this.setXA(this.getXA()+player.getXA());
+
+        return this;
+    }
+
+    public Attacker calculatePer90(){
+        this.setXGper90((this.getXG()/this.getMinutes()) * 90);
+        this.setXGIPer90((this.getXGI()/this.getMinutes()) * 90);
+        this.setXAper90((this.getXA()/this.getMinutes() * 90));
+
+        return this;
+    }
 }

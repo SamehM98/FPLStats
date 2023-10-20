@@ -38,33 +38,33 @@ public class GameweekService {
                     Attacker attacker = objectMapper.convertValue(p.get("stats"), Attacker.class);
 
                     if (attackers.containsKey(playerId)) {
-                        attackers.put(playerId, Player.calculatePer90Outfield(Player.addOutfield(attackers.get(playerId), attacker)));
+                        attackers.put(playerId, attackers.get(playerId).addStats(attacker).calculatePer90());
                     } else {
                         attacker.setPlayerInfo(player);
-                        attackers.put(playerId, Player.calculatePer90Outfield(attacker));
+                        attackers.put(playerId, attacker.calculatePer90());
                     }
                 }
                 else if(player.getPosition().equals(2)){
                     Defender defender = objectMapper.convertValue(p.get("stats"), Defender.class);
 
                     if(defenders.containsKey(playerId)){
-                        defenders.put(playerId, (Defender) Player.calculatePer90Outfield(Player.addOutfield(defenders.get(playerId),defender)));
+                        defenders.put(playerId, (Defender) defenders.get(playerId).addStats(defender).calculatePer90());
                     }
                     else{
                         defender.setPlayerInfo(player);
-                        defenders.put(playerId, (Defender) Player.calculatePer90Outfield(defender));
+                        defenders.put(playerId, (Defender) defender.calculatePer90());
                     }
                 }
                 else{
                     Goalkeeper goalkeeper = objectMapper.convertValue(p.get("stats"),Goalkeeper.class);
 
                     if(goalkeepers.containsKey(playerId)){
-                        goalkeepers.put(playerId, Goalkeeper.calculatePer90Keeper(Goalkeeper.addKeeper(goalkeepers.get(playerId),goalkeeper)));
+                        goalkeepers.put(playerId, goalkeepers.get(playerId).addStats(goalkeeper).calculatePer90());
                     }
                     else{
                         player.setPlayerInfo(player);
-                        goalkeepers.put(playerId,Player.calculatePer90Keeper(goalkeeper));
-                    }
+                        goalkeepers.put(playerId,goalkeeper.calculatePer90());
+        }
                 }
             }
         });

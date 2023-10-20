@@ -28,4 +28,21 @@ public class Goalkeeper extends PlayerStats{
 
     @JsonProperty("saves")
     private Integer saves;
+
+    public Goalkeeper addStats(Goalkeeper goalkeeper){
+        addData(this,goalkeeper);
+
+        this.setCleanSheets(this.getCleanSheets()+goalkeeper.getCleanSheets());
+        this.setGoalsConceded(this.getGoalsConceded()+ goalkeeper.getGoalsConceded());
+        this.setSaves(this.getSaves()+goalkeeper.getSaves());
+        this.setXGConceded(this.getXGConceded()+goalkeeper.getGoalsConceded());
+
+        return this;
+    }
+
+    public Goalkeeper calculatePer90(){
+        this.setSavesPer90((double) (this.getSaves() / this.getMinutes() * 90));
+        this.setXGConcededPer90(this.getXGConceded()/this.getMinutes() * 90);
+        return this;
+    }
 }

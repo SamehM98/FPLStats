@@ -18,4 +18,11 @@ public class PlayerStats extends Player{
     private Integer starts;
     @JsonProperty("bonus")
     private Integer bonus;
+
+    public void addData(PlayerStats originalObject, PlayerStats tempObject){
+        originalObject.setMinutes(originalObject.getMinutes()+tempObject.getMinutes());
+        originalObject.setBonus(originalObject.getBonus()+tempObject.getBonus());
+        originalObject.setStarts(originalObject.getStarts()+tempObject.getStarts());
+        originalObject.setTotalPoints(originalObject.getTotalPoints()+ tempObject.getTotalPoints());
+    }
 }

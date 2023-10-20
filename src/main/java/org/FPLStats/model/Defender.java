@@ -22,4 +22,21 @@ public class Defender extends Attacker{
 
     @JsonProperty("clean_sheets")
     private Integer cleanSheets;
+
+    @Override
+    public Attacker addStats(Attacker player) {
+        super.addStats(player);
+        Defender tempDefender = (Defender) player;
+        this.setCleanSheets(this.getCleanSheets()+tempDefender.getCleanSheets());
+        this.setXGConceded(this.getXGConceded()+tempDefender.getGoalsConceded());
+        this.setGoalsConceded(this.getGoalsConceded()+tempDefender.getGoalsConceded());
+        return this;
+    }
+
+    @Override
+    public Attacker calculatePer90() {
+        super.calculatePer90();
+        this.setXGConcededPer90((this.getXGConceded()/this.getMinutes() * 90));
+        return this;
+    }
 }
