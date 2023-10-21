@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.FPLStats.client.FplClient;
 import org.FPLStats.helpers.Comparators;
+import org.FPLStats.helpers.HelperService;
 import org.FPLStats.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ public class SeasonService {
     private FplClient fplClient;
     @Autowired
     private BootstrapService bootstrapService;
+    @Autowired
+    private HelperService helperService;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public ArrayList<?> playerSeasonData(String sort, Integer position, Integer team){
+    public ArrayList<? extends PlayerStats> playerSeasonData(String sort, Integer position, Integer team){
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         HashMap<String, Object> bootstrap = fplClient.bootstrap();
         Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
@@ -41,25 +44,7 @@ public class SeasonService {
             }
         });
 
-        Comparator<Attacker> attackerComparator = Comparators.attackerComparator(sort);
-        Comparator<Defender> defenderComparator = Comparators.defenderComparator(sort);
-        Comparator<Goalkeeper> goalkeeperComparator = Comparators.goalkeeperComparator(sort);
-
-        if(position.equals(1)) {
-            goalkeepers.sort(goalkeeperComparator);
-            return goalkeepers;
-        }
-        else if(position.equals(2)){
-            if(Comparators.defenceStats().contains(sort))
-                defenders.sort(defenderComparator);
-            else
-                defenders.sort(attackerComparator);
-
-            return defenders;
-        }
-
-        attackers.sort(attackerComparator);
-        return attackers;
+        return helperService.sortedStats(position,sort,attackers,defenders,goalkeepers);
     }
 
     public ArrayList<TeamStats> teamSeasonData(String sort){

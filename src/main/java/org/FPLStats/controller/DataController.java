@@ -34,7 +34,7 @@ public class DataController {
     @GetMapping("/teams")
     public ArrayList<TeamStats> gameweekTeam(@RequestParam Integer begin,
                                              @RequestParam Integer end,
-                                             @RequestParam(required = false) String sort){
+                                             @RequestParam(required = false, defaultValue = "") String sort){
         return gameweekService.gameweekRangeTeams(begin,end,sort);
     }
 }

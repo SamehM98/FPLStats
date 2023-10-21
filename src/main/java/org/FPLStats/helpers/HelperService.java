@@ -2,12 +2,11 @@ package org.FPLStats.helpers;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.FPLStats.model.Player;
-import org.FPLStats.model.Team;
-import org.FPLStats.model.TeamStats;
+import org.FPLStats.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -33,5 +32,31 @@ public class HelperService {
             map.put((Integer) o.get("id"),temp);
         });
         return map;
+    }
+
+    public ArrayList<? extends PlayerStats> sortedStats(Integer position,
+                                                        String sort,
+                                                        ArrayList<Attacker> attackers,
+                                                        ArrayList<Defender> defenders,
+                                                        ArrayList<Goalkeeper> goalkeepers){
+        Comparator<Attacker> attackerComparator = Comparators.attackerComparator(sort);
+        Comparator<Defender> defenderComparator = Comparators.defenderComparator(sort);
+        Comparator<Goalkeeper> goalkeeperComparator = Comparators.goalkeeperComparator(sort);
+
+        if(position.equals(1)) {
+            goalkeepers.sort(goalkeeperComparator);
+            return goalkeepers;
+        }
+        else if(position.equals(2)){
+            if(Comparators.defenceStats().contains(sort))
+                defenders.sort(defenderComparator);
+            else
+                defenders.sort(attackerComparator);
+
+            return defenders;
+        }
+
+        attackers.sort(attackerComparator);
+        return attackers;
     }
 }

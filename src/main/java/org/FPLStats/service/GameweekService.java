@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.FPLStats.client.FplClient;
 import org.FPLStats.helpers.Comparators;
+import org.FPLStats.helpers.HelperService;
 import org.FPLStats.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class GameweekService {
     private FplClient fplClient;
     @Autowired
     private BootstrapService bootstrapService;
+    @Autowired
+    private HelperService helperService;
 
     HashMap<Integer, Attacker> attackers = new HashMap<>();
     HashMap<Integer, Defender> defenders = new HashMap<>();
@@ -64,7 +67,7 @@ public class GameweekService {
                     else{
                         player.setPlayerInfo(player);
                         goalkeepers.put(playerId,goalkeeper.calculatePer90());
-        }
+                    }
                 }
             }
         });
@@ -72,35 +75,22 @@ public class GameweekService {
 
     public ArrayList<? extends PlayerStats> gameweekRange(Integer begin, Integer end, Integer position, Integer team, String sort){
         HashMap<Integer, Object> playerHashMap = bootstrapService.playersInfo((ArrayList<LinkedHashMap<String, Object>>) fplClient.bootstrap().get("elements"));
-        Integer minimumMinutes = (end-begin+1)*25;
-
-        Comparator<Attacker> attackerComparator = Comparators.attackerComparator(sort);
-        Comparator<Defender> defenderComparator = Comparators.defenderComparator(sort);
-        Comparator<Goalkeeper> goalkeeperComparator = Comparators.goalkeeperComparator(sort);
+        Integer minimumMinutes = (end-begin+1)*15;
 
         for(int i=begin;i<=end;i++){
             oneGameweek(i,playerHashMap,position,team);
         }
-        if(position.equals(3) || position.equals(4)){
-            return attackers.values().stream().filter(
-                    o -> o.getMinutes() >= minimumMinutes
-            ).sorted(attackerComparator).collect(Collectors.toCollection(ArrayList::new));
-        }
-        else if(position.equals(2)){
-            ArrayList<Defender> defendersList = defenders.values().stream().filter(
-                    o -> o.getMinutes() >= minimumMinutes
-            ).collect(Collectors.toCollection(ArrayList::new));
-            if(Comparators.defenceStats().contains(sort))
-                defendersList.sort(defenderComparator);
-            else
-                defendersList.sort(attackerComparator);
-            return defendersList;
-        }
-        else{
-            return goalkeepers.values().stream().filter(
-                    o -> o.getMinutes() >= minimumMinutes
-            ).sorted(goalkeeperComparator).collect(Collectors.toCollection(ArrayList::new));
-        }
+
+        return helperService.sortedStats(position,
+                sort,attackers.values().stream().filter(
+                        o -> o.getMinutes() >= minimumMinutes
+                ).collect(Collectors.toCollection(ArrayList::new)),
+                defenders.values().stream().filter(
+                        o -> o.getMinutes() >= minimumMinutes
+                ).collect(Collectors.toCollection(ArrayList::new)),
+                goalkeepers.values().stream().filter(
+                        o -> o.getMinutes() >= minimumMinutes
+                ).collect(Collectors.toCollection(ArrayList::new)));
     }
 
     public ArrayList<TeamStats> gameweekRangeTeams(Integer begin, Integer end,String sort){
