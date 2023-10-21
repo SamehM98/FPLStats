@@ -1,10 +1,7 @@
 package org.FPLStats.helpers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.FPLStats.model.Attacker;
-import org.FPLStats.model.Defender;
-import org.FPLStats.model.Goalkeeper;
-import org.FPLStats.model.TeamStats;
+import org.FPLStats.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,5 +72,9 @@ public class Comparators {
                 return o1.getXGConceded().compareTo(o2.getXGConceded());
             return o2.getXG().compareTo(o1.getXG());
         };
+    }
+
+    public static Comparator<TeamFixtures> teamFixturesComparator(){
+        return Comparator.comparing(TeamFixtures::getTotalDifficulty);
     }
 }

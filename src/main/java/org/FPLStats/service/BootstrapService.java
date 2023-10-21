@@ -1,10 +1,7 @@
 package org.FPLStats.service;
 
 import org.FPLStats.helpers.HelperService;
-import org.FPLStats.model.Player;
-import org.FPLStats.model.Position;
-import org.FPLStats.model.Team;
-import org.FPLStats.model.TeamStats;
+import org.FPLStats.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +27,10 @@ public class BootstrapService {
 
     public HashMap<Integer, TeamStats> teamStats(ArrayList<LinkedHashMap<String, Object>> objects){
         return helperService.teamStatsHashMap(objects);
+    }
+
+    public HashMap<Integer, TeamFixtures> teamFixtures(ArrayList<LinkedHashMap<String, Object>> objects){
+        return helperService.teamFixturesHashMap(objects);
     }
 
     public Integer currentGameweek(HashMap<String,Object> bootstrap){

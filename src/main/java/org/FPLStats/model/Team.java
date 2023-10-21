@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Team extends BasicInfo{
     @JsonProperty("short_name")
     private String shortName;

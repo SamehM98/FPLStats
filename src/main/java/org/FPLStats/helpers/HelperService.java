@@ -24,12 +24,22 @@ public class HelperService {
         return map;
     }
 
-    public HashMap<Integer, TeamStats> teamStatsHashMap(ArrayList<LinkedHashMap<String, Object>> objects){
+    public HashMap<Integer, TeamStats> teamStatsHashMap(ArrayList<LinkedHashMap<String, Object>> bootstrapTeams){
         HashMap<Integer,TeamStats> map = new HashMap<>();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objects.forEach(o -> {
+        bootstrapTeams.forEach(o -> {
             TeamStats temp = objectMapper.convertValue(o,TeamStats.class);
-            map.put((Integer) o.get("id"),temp);
+            map.put(temp.getId(),temp);
+        });
+        return map;
+    }
+
+    public HashMap<Integer, TeamFixtures> teamFixturesHashMap(ArrayList<LinkedHashMap<String, Object>> bootstrapTeams){
+        HashMap<Integer,TeamFixtures> map = new HashMap<>();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        bootstrapTeams.forEach(o -> {
+            TeamFixtures temp = objectMapper.convertValue(o,TeamFixtures.class);
+            map.put(temp.getId(),temp);
         });
         return map;
     }
@@ -39,24 +49,20 @@ public class HelperService {
                                                         ArrayList<Attacker> attackers,
                                                         ArrayList<Defender> defenders,
                                                         ArrayList<Goalkeeper> goalkeepers){
-        Comparator<Attacker> attackerComparator = Comparators.attackerComparator(sort);
-        Comparator<Defender> defenderComparator = Comparators.defenderComparator(sort);
-        Comparator<Goalkeeper> goalkeeperComparator = Comparators.goalkeeperComparator(sort);
-
         if(position.equals(1)) {
-            goalkeepers.sort(goalkeeperComparator);
+            goalkeepers.sort(Comparators.goalkeeperComparator(sort));
             return goalkeepers;
         }
         else if(position.equals(2)){
             if(Comparators.defenceStats().contains(sort))
-                defenders.sort(defenderComparator);
+                defenders.sort(Comparators.defenderComparator(sort));
             else
-                defenders.sort(attackerComparator);
+                defenders.sort(Comparators.attackerComparator(sort));
 
             return defenders;
         }
 
-        attackers.sort(attackerComparator);
+        attackers.sort(Comparators.attackerComparator(sort));
         return attackers;
     }
 }
