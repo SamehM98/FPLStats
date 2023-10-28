@@ -6,6 +6,8 @@ import org.FPLStats.client.FplClient;
 import org.FPLStats.helpers.Comparators;
 import org.FPLStats.helpers.HelperService;
 import org.FPLStats.model.*;
+import org.FPLStats.model.response.PlayerStatsResponse;
+import org.FPLStats.model.response.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +24,12 @@ public class SeasonService {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public ArrayList<? extends PlayerStats> playerSeasonData(String sort, Integer position, Integer team){
+    public PlayerStatsResponse playerSeasonData(String sort, Integer position, Integer team){
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         HashMap<String, Object> bootstrap = fplClient.bootstrap();
         Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
         Integer minimumMinutes = (currentGameweek-1)*25;
+        ArrayList<Team> teams = helperService.teamArrayList((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
 
         ArrayList<Attacker> attackers = new ArrayList<>();
         ArrayList<Defender> defenders = new ArrayList<>();
@@ -44,13 +47,13 @@ public class SeasonService {
             }
         });
 
-        return helperService.sortedStats(position,sort,attackers,defenders,goalkeepers);
+        return new PlayerStatsResponse(helperService.sortedStats(position,sort,attackers,defenders,goalkeepers),Comparators.positionComparators(position),currentGameweek,teams);
     }
 
-    public ArrayList<TeamStats> teamSeasonData(String sort){
+    public ResponseDto teamSeasonData(String sort){
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         HashMap<String, Object> bootstrap = fplClient.bootstrap();
-
+        Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
         HashMap<Integer, TeamStats> teamStatsMap = bootstrapService.teamStats((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
         ArrayList<LinkedHashMap<String, Object>> playerObjects = (ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("elements");
 
@@ -79,6 +82,6 @@ public class SeasonService {
         ArrayList<TeamStats> teams = new ArrayList<>(teamStatsMap.values());
         teams.sort(Comparators.teamStatsComparator(sort));
 
-        return teams;
+        return new ResponseDto(teams,Comparators.teamsComparator(),currentGameweek);
     }
 }

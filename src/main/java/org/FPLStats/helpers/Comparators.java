@@ -6,9 +6,20 @@ import org.FPLStats.model.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 public class Comparators {
-    ObjectMapper objectMapper = new ObjectMapper();
+    public static ArrayList<String> positionComparators(Integer position){
+        if(position.equals(1))
+            return goalkeeperSort();
+        if(position.equals(2))
+            return defenceSort();
+        return attackerSort();
+    }
+
+    public static ArrayList<String> teamsComparator(){
+        return new ArrayList<>(Arrays.asList("xGC","xG"));
+    }
 
     public static ArrayList<String> defenceStats(){
         return new ArrayList<>(Arrays.asList("goalsConceded", "xGC", "cleanSheets", "xGCPer90"));

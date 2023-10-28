@@ -44,6 +44,16 @@ public class HelperService {
         return map;
     }
 
+    public ArrayList<Team> teamArrayList(ArrayList<LinkedHashMap<String, Object>> bootstrapTeams){
+        ArrayList<Team> teams = new ArrayList<>();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        bootstrapTeams.forEach(o -> {
+            Team temp = objectMapper.convertValue(o,Team.class);
+            teams.add(temp);
+        });
+        return teams;
+    }
+
     public ArrayList<? extends PlayerStats> sortedStats(Integer position,
                                                         String sort,
                                                         ArrayList<Attacker> attackers,

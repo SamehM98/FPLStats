@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.FPLStats.client.FplClient;
 import org.FPLStats.helpers.Comparators;
-import org.FPLStats.helpers.HelperService;
 import org.FPLStats.model.FplFixture;
 import org.FPLStats.model.SingleFixture;
 import org.FPLStats.model.TeamFixtures;
+import org.FPLStats.model.response.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +25,10 @@ public class FixturesService {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public ArrayList<TeamFixtures> fixturesRange(Integer begin, Integer end){
+    public ResponseDto fixturesRange(Integer begin, Integer end){
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         HashMap<String, Object> bootstrap = fplClient.bootstrap();
+        Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
         HashMap<Integer, TeamFixtures> teamFixturesHashMap = bootstrapService.teamFixtures((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
 
         ArrayList<Object> fixtures = fplClient.fixtures();
@@ -46,7 +47,9 @@ public class FixturesService {
             }
         });
 
-        return teamFixturesHashMap.values().stream().sorted(Comparators.teamFixturesComparator())
+        ArrayList<TeamFixtures> teamFixtures = teamFixturesHashMap.values().stream().sorted(Comparators.teamFixturesComparator())
                 .collect(Collectors.toCollection(ArrayList::new));
+
+        return new ResponseDto(teamFixtures,null,currentGameweek);
     }
 }

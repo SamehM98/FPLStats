@@ -6,6 +6,8 @@ import org.FPLStats.client.FplClient;
 import org.FPLStats.helpers.Comparators;
 import org.FPLStats.helpers.HelperService;
 import org.FPLStats.model.*;
+import org.FPLStats.model.response.PlayerStatsResponse;
+import org.FPLStats.model.response.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,15 +75,18 @@ public class GameweekService {
         });
     }
 
-    public ArrayList<? extends PlayerStats> gameweekRange(Integer begin, Integer end, Integer position, Integer team, String sort){
-        HashMap<Integer, Object> playerHashMap = bootstrapService.playersInfo((ArrayList<LinkedHashMap<String, Object>>) fplClient.bootstrap().get("elements"));
+    public PlayerStatsResponse gameweekRange(Integer begin, Integer end, Integer position, Integer team, String sort){
+        HashMap<String, Object> bootstrap = fplClient.bootstrap();
+        HashMap<Integer, Object> playerHashMap = bootstrapService.playersInfo((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("elements"));
+        Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
         Integer minimumMinutes = (end-begin+1)*15;
+        ArrayList<Team> teams = helperService.teamArrayList((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
 
         for(int i=begin;i<=end;i++){
             oneGameweek(i,playerHashMap,position,team);
         }
 
-        return helperService.sortedStats(position,
+        return new PlayerStatsResponse(helperService.sortedStats(position,
                 sort,attackers.values().stream().filter(
                         o -> o.getMinutes() >= minimumMinutes
                 ).collect(Collectors.toCollection(ArrayList::new)),
@@ -90,11 +95,12 @@ public class GameweekService {
                 ).collect(Collectors.toCollection(ArrayList::new)),
                 goalkeepers.values().stream().filter(
                         o -> o.getMinutes() >= minimumMinutes
-                ).collect(Collectors.toCollection(ArrayList::new)));
+                ).collect(Collectors.toCollection(ArrayList::new))),Comparators.positionComparators(position),currentGameweek,teams);
     }
 
-    public ArrayList<TeamStats> gameweekRangeTeams(Integer begin, Integer end,String sort){
+    public ResponseDto gameweekRangeTeams(Integer begin, Integer end, String sort){
         HashMap<String, Object> bootstrap = fplClient.bootstrap();
+        Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
         HashMap<Integer, Object> playerHashMap = bootstrapService.playersInfo((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("elements"));
         HashMap<Integer, TeamStats> teamStatsMap = bootstrapService.teamStats((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
 
@@ -103,7 +109,8 @@ public class GameweekService {
         }
 
         Comparator<TeamStats> comparator = Comparators.teamStatsComparator(sort);
-        return teamStatsMap.values().stream().sorted(comparator).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<TeamStats> teamStats = teamStatsMap.values().stream().sorted(comparator).collect(Collectors.toCollection(ArrayList::new));
+        return new ResponseDto(teamStats,Comparators.teamsComparator(),currentGameweek);
     }
 
     private void oneGameweekTeams(int gw, HashMap<Integer, TeamStats> teamStatsMap, HashMap<Integer, Object> playerHashMap) {
