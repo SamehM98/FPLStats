@@ -12,8 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TeamStats extends Team{
     @JsonProperty("expected_goals")
-    private Double xG;
+    private Double xG = 0.00;
 
     @JsonProperty("expected_goals_conceded")
-    private Double xGConceded;
+    private Double xGConceded = 0.00;
 }

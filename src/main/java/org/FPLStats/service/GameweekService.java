@@ -129,21 +129,11 @@ public class GameweekService {
 
             if(player.getPosition().equals(1)){
                 Goalkeeper goalkeeper = objectMapper.convertValue(p.get("stats"),Goalkeeper.class);
-                if(stats.getXGConceded() == null){
-                    stats.setXGConceded(goalkeeper.getXGConceded());
-                }
-                else{
-                    stats.setXGConceded(stats.getXGConceded()+goalkeeper.getXGConceded());
-                }
+                stats.setXGConceded(HelperService.doubleFormatter(stats.getXGConceded()+goalkeeper.getXGConceded()));
             }
             else{
                 Attacker attacker = objectMapper.convertValue(p.get("stats"),Attacker.class);
-                if(stats.getXG() == null){
-                    stats.setXG(attacker.getXG());
-                }
-                else{
-                    stats.setXG(stats.getXG()+attacker.getXG());
-                }
+                stats.setXG(HelperService.doubleFormatter(stats.getXG()+attacker.getXG()));
             }
 
             teamStatsMap.put(stats.getId(),stats);

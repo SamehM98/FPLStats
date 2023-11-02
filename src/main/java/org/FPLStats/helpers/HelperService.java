@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.FPLStats.model.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 @Service
 public class HelperService {
@@ -74,5 +71,9 @@ public class HelperService {
 
         attackers.sort(Comparators.attackerComparator(sort));
         return attackers;
+    }
+
+    public static Double doubleFormatter(Double number){
+        return Math.round(number * 100) / 100.0;
     }
 }

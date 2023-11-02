@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.FPLStats.helpers.HelperService;
 
 @Getter
 @Setter
@@ -17,33 +18,33 @@ public class Attacker extends PlayerStats{
     private Integer assists;
 
     @JsonProperty("expected_goals")
-    private Double xG;
+    private Double xG = 0.00;
     @JsonProperty("expected_assists")
-    private Double xA;
+    private Double xA = 0.00;
     @JsonProperty("expected_goal_involvements")
-    private Double xGI;
+    private Double xGI = 0.00;
     @JsonProperty("expected_goals_per_90")
-    private Double xGper90;
+    private Double xGper90 = 0.00;
     @JsonProperty("expected_assists_per_90")
-    private Double xAper90;
+    private Double xAper90 = 0.00;
     @JsonProperty("expected_goal_involvements_per_90")
-    private Double xGIPer90;
+    private Double xGIPer90 = 0.00;
 
     public Attacker addStats(Attacker player){
         addData(this,player);
 
         this.setGoals(this.getGoals()+player.getGoals());
         this.setAssists(this.getAssists()+ player.getAssists());
-        this.setXG(this.getXG()+ player.getXG());
-        this.setXA(this.getXA()+player.getXA());
+        this.setXG(HelperService.doubleFormatter(this.getXG()+ player.getXG()));
+        this.setXA(HelperService.doubleFormatter(this.getXA()+player.getXA()));
 
         return this;
     }
 
     public Attacker calculatePer90(){
-        this.setXGper90((this.getXG()/this.getMinutes()) * 90);
-        this.setXGIPer90((this.getXGI()/this.getMinutes()) * 90);
-        this.setXAper90((this.getXA()/this.getMinutes() * 90));
+        this.setXGper90(HelperService.doubleFormatter((this.getXG()/this.getMinutes()) * 90));
+        this.setXGIPer90(HelperService.doubleFormatter((this.getXGI()/this.getMinutes()) * 90));
+        this.setXAper90(HelperService.doubleFormatter((this.getXA()/this.getMinutes()) * 90));
 
         return this;
     }

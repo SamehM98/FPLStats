@@ -63,18 +63,12 @@ public class SeasonService {
             if(p.get("element_type").equals(1)){
                 Goalkeeper goalkeeper = objectMapper.convertValue(p,Goalkeeper.class);
                 teamStats = teamStatsMap.get(team);
-                if(teamStats.getXGConceded() == null)
-                    teamStats.setXGConceded(goalkeeper.getXGConceded());
-                else
-                    teamStats.setXGConceded(teamStats.getXGConceded() + goalkeeper.getXGConceded());
+                teamStats.setXGConceded(HelperService.doubleFormatter(teamStats.getXGConceded() + goalkeeper.getXGConceded()));
             }
             else{
                 Attacker attacker = objectMapper.convertValue(p,Attacker.class);
                 teamStats = teamStatsMap.get(team);
-                if(teamStats.getXG() == null)
-                    teamStats.setXG(attacker.getXG());
-                else
-                    teamStats.setXG(teamStats.getXG() + attacker.getXG());
+                teamStats.setXG(HelperService.doubleFormatter(teamStats.getXG() + attacker.getXG()));
             }
             teamStatsMap.put(team,teamStats);
         });

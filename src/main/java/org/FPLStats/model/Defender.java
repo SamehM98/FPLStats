@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.FPLStats.helpers.HelperService;
 
 @Getter
 @Setter
@@ -28,7 +29,7 @@ public class Defender extends Attacker{
         super.addStats(player);
         Defender tempDefender = (Defender) player;
         this.setCleanSheets(this.getCleanSheets()+tempDefender.getCleanSheets());
-        this.setXGConceded(this.getXGConceded()+tempDefender.getGoalsConceded());
+        this.setXGConceded(HelperService.doubleFormatter(this.getXGConceded()+tempDefender.getGoalsConceded()));
         this.setGoalsConceded(this.getGoalsConceded()+tempDefender.getGoalsConceded());
         return this;
     }
@@ -36,7 +37,7 @@ public class Defender extends Attacker{
     @Override
     public Attacker calculatePer90() {
         super.calculatePer90();
-        this.setXGConcededPer90((this.getXGConceded()/this.getMinutes() * 90));
+        this.setXGConcededPer90(HelperService.doubleFormatter((this.getXGConceded()/this.getMinutes()) * 90));
         return this;
     }
 }
