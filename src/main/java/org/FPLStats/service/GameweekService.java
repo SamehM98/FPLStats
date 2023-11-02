@@ -103,14 +103,17 @@ public class GameweekService {
         Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
         HashMap<Integer, Object> playerHashMap = bootstrapService.playersInfo((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("elements"));
         HashMap<Integer, TeamStats> teamStatsMap = bootstrapService.teamStats((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
-
+        if(begin == 0 || end == 0){
+            begin = Math.min(currentGameweek,38);
+            end = Math.min(currentGameweek+3,38);
+        }
         for(int i=begin;i<=end;i++){
             oneGameweekTeams(i,teamStatsMap,playerHashMap);
         }
 
         Comparator<TeamStats> comparator = Comparators.teamStatsComparator(sort);
         ArrayList<TeamStats> teamStats = teamStatsMap.values().stream().sorted(comparator).collect(Collectors.toCollection(ArrayList::new));
-        return new ResponseDto(teamStats,Comparators.teamsComparator(),currentGameweek);
+        return new ResponseDto(teamStats,Comparators.teamsComparator(),currentGameweek,begin,end);
     }
 
     private void oneGameweekTeams(int gw, HashMap<Integer, TeamStats> teamStatsMap, HashMap<Integer, Object> playerHashMap) {

@@ -82,6 +82,6 @@ public class SeasonService {
         ArrayList<TeamStats> teams = new ArrayList<>(teamStatsMap.values());
         teams.sort(Comparators.teamStatsComparator(sort));
 
-        return new ResponseDto(teams,Comparators.teamsComparator(),currentGameweek);
+        return new ResponseDto(teams,Comparators.teamsComparator(),currentGameweek,0,0);
     }
 }

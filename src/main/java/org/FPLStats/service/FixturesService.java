@@ -32,9 +32,15 @@ public class FixturesService {
         HashMap<Integer, TeamFixtures> teamFixturesHashMap = bootstrapService.teamFixtures((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
 
         ArrayList<Object> fixtures = fplClient.fixtures();
+        if(begin == 0 || end == 0){
+            begin = Math.min(currentGameweek,38);
+            end = Math.min(currentGameweek+3,38);
+        }
+        Integer finalBegin = begin;
+        Integer finalEnd = end;
         fixtures.forEach(f -> {
             FplFixture fplFixture = objectMapper.convertValue(f,FplFixture.class);
-            if(fplFixture.getGameweek() != null && fplFixture.getGameweek() >= begin && fplFixture.getGameweek() <= end){
+            if(fplFixture.getGameweek() != null && fplFixture.getGameweek() >= finalBegin && fplFixture.getGameweek() <= finalEnd){
                 Integer homeTeam = fplFixture.getHomeTeam();
                 Integer awayTeam = fplFixture.getAwayTeam();
                 Integer homeTeamDifficulty = fplFixture.getHomeTeamDifficulty();
@@ -50,6 +56,6 @@ public class FixturesService {
         ArrayList<TeamFixtures> teamFixtures = teamFixturesHashMap.values().stream().sorted(Comparators.teamFixturesComparator())
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        return new ResponseDto(teamFixtures,null,currentGameweek);
+        return new ResponseDto(teamFixtures,null,currentGameweek,finalBegin,finalEnd);
     }
 }

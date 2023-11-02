@@ -17,4 +17,8 @@ public class ResponseDto {
     private ArrayList<String> comparators;
 
     private Integer currentGameweek;
+
+    private Integer begin;
+
+    private Integer end;
 }
