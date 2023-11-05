@@ -16,7 +16,7 @@ public class DataController {
     private GameweekService gameweekService;
 
     @GetMapping("/players")
-    public PlayerStatsResponse gameweek(@RequestParam Integer begin, @RequestParam Integer end,
+    public PlayerStatsResponse gameweek(@RequestParam (required = false,defaultValue = "0") Integer begin, @RequestParam (required = false,defaultValue = "0") Integer end,
                                         @RequestParam Integer position,
                                         @RequestParam(required = false,defaultValue = "0") Integer team,
                                         @RequestParam(required = false, defaultValue = "") String sort){
@@ -24,8 +24,8 @@ public class DataController {
     }
 
     @GetMapping("/teams")
-    public ResponseDto gameweekTeam(@RequestParam Integer begin,
-                                    @RequestParam Integer end,
+    public ResponseDto gameweekTeam(@RequestParam (required = false,defaultValue = "0") Integer begin,
+                                    @RequestParam (required = false,defaultValue = "0") Integer end,
                                     @RequestParam(required = false, defaultValue = "") String sort){
         return gameweekService.gameweekRangeTeams(begin,end,sort);
     }

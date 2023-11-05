@@ -13,7 +13,8 @@ public class FixturesController {
     private FixturesService fixturesService;
 
     @GetMapping("/fixtures")
-    public ResponseDto fixtures(@RequestParam Integer begin, @RequestParam Integer end){
+    public ResponseDto fixtures(@RequestParam (required = false,defaultValue = "0") Integer begin,
+                                @RequestParam (required = false,defaultValue = "0") Integer end){
         return fixturesService.fixturesRange(begin,end);
     }
 }
