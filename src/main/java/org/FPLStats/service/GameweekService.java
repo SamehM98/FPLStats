@@ -104,8 +104,8 @@ public class GameweekService {
         HashMap<Integer, Object> playerHashMap = bootstrapService.playersInfo((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("elements"));
         HashMap<Integer, TeamStats> teamStatsMap = bootstrapService.teamStats((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
         if(begin == 0 || end == 0){
-            begin = Math.min(currentGameweek,38);
-            end = Math.min(currentGameweek+3,38);
+            begin = Math.max(currentGameweek-3,1);
+            end = currentGameweek;
         }
         for(int i=begin;i<=end;i++){
             oneGameweekTeams(i,teamStatsMap,playerHashMap);

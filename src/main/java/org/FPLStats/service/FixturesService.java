@@ -33,7 +33,7 @@ public class FixturesService {
 
         ArrayList<Object> fixtures = fplClient.fixtures();
         if(begin == 0 || end == 0){
-            begin = Math.min(currentGameweek,38);
+            begin = currentGameweek;
             end = Math.min(currentGameweek+3,38);
         }
         Integer finalBegin = begin;
