@@ -42,9 +42,11 @@ public class Attacker extends PlayerStats{
     }
 
     public Attacker calculatePer90(){
-        this.setXGper90(HelperService.doubleFormatter((this.getXG()/this.getMinutes()) * 90));
-        this.setXGIPer90(HelperService.doubleFormatter((this.getXGI()/this.getMinutes()) * 90));
-        this.setXAper90(HelperService.doubleFormatter((this.getXA()/this.getMinutes()) * 90));
+        if(this.getMinutes() > 0) {
+            this.setXGper90(HelperService.doubleFormatter((this.getXG() / this.getMinutes()) * 90));
+            this.setXGIPer90(HelperService.doubleFormatter((this.getXGI() / this.getMinutes()) * 90));
+            this.setXAper90(HelperService.doubleFormatter((this.getXA() / this.getMinutes()) * 90));
+        }
 
         return this;
     }

@@ -36,8 +36,10 @@ public class Defender extends Attacker{
 
     @Override
     public Attacker calculatePer90() {
-        super.calculatePer90();
-        this.setXGConcededPer90(HelperService.doubleFormatter((this.getXGConceded()/this.getMinutes()) * 90));
+        if(this.getMinutes() > 0) {
+            super.calculatePer90();
+            this.setXGConcededPer90(HelperService.doubleFormatter((this.getXGConceded() / this.getMinutes()) * 90));
+        }
         return this;
     }
 }

@@ -67,7 +67,7 @@ public class GameweekService {
                         goalkeepers.put(playerId, goalkeepers.get(playerId).addStats(goalkeeper).calculatePer90());
                     }
                     else{
-                        player.setPlayerInfo(player);
+                        goalkeeper.setPlayerInfo(player);
                         goalkeepers.put(playerId,goalkeeper.calculatePer90());
                     }
                 }
@@ -81,7 +81,10 @@ public class GameweekService {
         Integer currentGameweek = bootstrapService.currentGameweek(bootstrap);
         Integer minimumMinutes = (end-begin+1)*15;
         ArrayList<Team> teams = helperService.teamArrayList((ArrayList<LinkedHashMap<String, Object>>) bootstrap.get("teams"));
-
+        if(begin == 0 || end == 0){
+            begin = Math.max(currentGameweek-3,1);
+            end = currentGameweek;
+        }
         for(int i=begin;i<=end;i++){
             oneGameweek(i,playerHashMap,position,team);
         }

@@ -68,12 +68,12 @@ public class Comparators {
     public static Comparator<Goalkeeper> goalkeeperComparator(String sort){
         return (o1, o2) -> switch (sort) {
             case "goals conceded" -> o1.getGoalsConceded().compareTo(o2.getGoalsConceded());
-            case "xGC" -> o1.getXGConceded().compareTo(o2.getXGConceded());
+            case "xGCPer90" -> o1.getXGConcededPer90().compareTo(o2.getXGConcededPer90());
             case "clean sheets" -> o2.getCleanSheets().compareTo(o1.getCleanSheets());
             case "saves" -> o2.getSaves().compareTo(o1.getSaves());
             case "savesPer90" -> o2.getSavesPer90().compareTo(o1.getSavesPer90());
             case "bonus" -> o2.getBonus().compareTo(o1.getBonus());
-            default -> o1.getXGConcededPer90().compareTo(o2.getXGConcededPer90());
+            default -> o1.getXGConceded().compareTo(o2.getXGConceded());
         };
     }
 

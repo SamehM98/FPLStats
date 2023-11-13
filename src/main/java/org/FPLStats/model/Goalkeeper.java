@@ -42,8 +42,10 @@ public class Goalkeeper extends PlayerStats{
     }
 
     public Goalkeeper calculatePer90(){
-        this.setSavesPer90(HelperService.doubleFormatter((double) (this.getSaves() / this.getMinutes() * 90)));
-        this.setXGConcededPer90(HelperService.doubleFormatter(this.getXGConceded()/this.getMinutes() * 90));
+        if(this.getMinutes() > 0) {
+            this.setSavesPer90(HelperService.doubleFormatter((double) (this.getSaves() / this.getMinutes() * 90)));
+            this.setXGConcededPer90(HelperService.doubleFormatter(this.getXGConceded() / this.getMinutes() * 90));
+        }
         return this;
     }
 }
