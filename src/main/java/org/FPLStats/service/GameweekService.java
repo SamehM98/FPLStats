@@ -98,7 +98,7 @@ public class GameweekService {
                 ).collect(Collectors.toCollection(ArrayList::new)),
                 goalkeepers.values().stream().filter(
                         o -> o.getMinutes() >= minimumMinutes
-                ).collect(Collectors.toCollection(ArrayList::new))),Comparators.positionComparators(position),currentGameweek,teams);
+                ).collect(Collectors.toCollection(ArrayList::new))),Comparators.positionComparators(position),currentGameweek,teams,begin,end);
     }
 
     public ResponseDto gameweekRangeTeams(Integer begin, Integer end, String sort){

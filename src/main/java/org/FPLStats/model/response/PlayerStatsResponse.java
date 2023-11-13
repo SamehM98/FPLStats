@@ -15,10 +15,12 @@ import java.util.ArrayList;
 public class PlayerStatsResponse extends ResponseDto{
     private ArrayList<Team> teams;
 
-    public PlayerStatsResponse(ArrayList<? extends PlayerStats> playerStats, ArrayList<String> comparators, Integer currentGameweek, ArrayList<Team> teams) {
+    public PlayerStatsResponse(ArrayList<? extends PlayerStats> playerStats, ArrayList<String> comparators, Integer currentGameweek, ArrayList<Team> teams, Integer begin, Integer end) {
         this.setStats(playerStats);
         this.setComparators(comparators);
         this.setCurrentGameweek(currentGameweek);
         this.setTeams(teams);
+        this.setBegin(begin);
+        this.setEnd(end);
     }
 }

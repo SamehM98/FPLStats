@@ -47,7 +47,7 @@ public class SeasonService {
             }
         });
 
-        return new PlayerStatsResponse(helperService.sortedStats(position,sort,attackers,defenders,goalkeepers),Comparators.positionComparators(position),currentGameweek,teams);
+        return new PlayerStatsResponse(helperService.sortedStats(position,sort,attackers,defenders,goalkeepers),Comparators.positionComparators(position),currentGameweek,teams,0,0);
     }
 
     public ResponseDto teamSeasonData(String sort){
