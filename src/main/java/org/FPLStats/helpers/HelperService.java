@@ -6,6 +6,7 @@ import org.FPLStats.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HelperService {
@@ -56,9 +57,10 @@ public class HelperService {
                                                         ArrayList<Attacker> attackers,
                                                         ArrayList<Defender> defenders,
                                                         ArrayList<Goalkeeper> goalkeepers){
+        Integer limit = 40;
         if(position.equals(1)) {
             goalkeepers.sort(Comparators.goalkeeperComparator(sort));
-            return goalkeepers;
+            return goalkeepers.stream().limit(limit).collect(Collectors.toCollection(ArrayList::new));
         }
         else if(position.equals(2)){
             if(Comparators.defenceStats().contains(sort))
@@ -66,11 +68,11 @@ public class HelperService {
             else
                 defenders.sort(Comparators.attackerComparator(sort));
 
-            return defenders;
+            return defenders.stream().limit(limit).collect(Collectors.toCollection(ArrayList::new));
         }
 
         attackers.sort(Comparators.attackerComparator(sort));
-        return attackers;
+        return attackers.stream().limit(limit).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static Double doubleFormatter(Double number){

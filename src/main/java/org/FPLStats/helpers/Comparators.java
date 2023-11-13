@@ -22,7 +22,7 @@ public class Comparators {
     }
 
     public static ArrayList<String> defenceStats(){
-        return new ArrayList<>(Arrays.asList("goalsConceded", "xGC", "cleanSheets", "xGCPer90"));
+        return new ArrayList<>(Arrays.asList("goals conceded", "xGC", "clean sheets", "xGCPer90"));
     }
 
     public static ArrayList<String> defenceSort(){
@@ -37,7 +37,7 @@ public class Comparators {
     }
 
     public static ArrayList<String> goalkeeperSort(){
-        return new ArrayList<>(Arrays.asList("goalsConceded", "xGC", "cleanSheets", "bonus",
+        return new ArrayList<>(Arrays.asList("goals conceded", "xGC", "clean sheets", "bonus",
                 "saves","savesPer90","xGCPer90"));
     }
     public static Comparator<Attacker> attackerComparator(String sort){
@@ -58,8 +58,8 @@ public class Comparators {
 
     public static Comparator<Defender> defenderComparator(String sort){
         return (o1, o2) -> switch (sort) {
-            case "goalsConceded" -> o1.getGoalsConceded().compareTo(o2.getGoalsConceded());
-            case "cleanSheets" -> o2.getCleanSheets().compareTo(o1.getCleanSheets());
+            case "goals conceded" -> o1.getGoalsConceded().compareTo(o2.getGoalsConceded());
+            case "clean sheets" -> o2.getCleanSheets().compareTo(o1.getCleanSheets());
             case "xGC" -> o1.getXGConceded().compareTo(o2.getXGConceded());
             default -> o1.getXGConcededPer90().compareTo(o2.getXGConcededPer90());
         };
@@ -67,9 +67,9 @@ public class Comparators {
 
     public static Comparator<Goalkeeper> goalkeeperComparator(String sort){
         return (o1, o2) -> switch (sort) {
-            case "goalsConceded" -> o1.getGoalsConceded().compareTo(o2.getGoalsConceded());
+            case "goals conceded" -> o1.getGoalsConceded().compareTo(o2.getGoalsConceded());
             case "xGC" -> o1.getXGConceded().compareTo(o2.getXGConceded());
-            case "cleanSheets" -> o2.getCleanSheets().compareTo(o1.getCleanSheets());
+            case "clean sheets" -> o2.getCleanSheets().compareTo(o1.getCleanSheets());
             case "saves" -> o2.getSaves().compareTo(o1.getSaves());
             case "savesPer90" -> o2.getSavesPer90().compareTo(o1.getSavesPer90());
             case "bonus" -> o2.getBonus().compareTo(o1.getBonus());
