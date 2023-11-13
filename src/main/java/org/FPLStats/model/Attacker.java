@@ -37,6 +37,7 @@ public class Attacker extends PlayerStats{
         this.setAssists(this.getAssists()+ player.getAssists());
         this.setXG(HelperService.doubleFormatter(this.getXG()+ player.getXG()));
         this.setXA(HelperService.doubleFormatter(this.getXA()+player.getXA()));
+        this.setXGI(HelperService.doubleFormatter(this.getXGI()+player.getXGI()));
 
         return this;
     }
